@@ -1,30 +1,39 @@
 import logoCetep from "../assets/images/cetep.jpeg";
 import logoEpt from "../assets/images/ept.jpeg";
-// import logoBahia from "../assets/images/bahia.jpeg";
 
 export default function LogoPanel() {
   return (
-    <div className="w-2/5 bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center gap-12 p-10">
+    <div className="w-2/5 bg-gradient-to-br from-blue-700 to-blue-900 text-white flex flex-col justify-center items-center p-12">
 
       <img
         src={logoCetep}
         alt="CETEP"
-        className="w-72 object-contain"
+        className="w-72 bg-white rounded-xl p-2 shadow-lg"
       />
 
       <img
         src={logoEpt}
-        alt="Educação Profissional e Tecnológica"
-        className="w-56 object-contain"
+        alt="EPT"
+        className="w-56 bg-white rounded-xl p-2 mt-8 shadow-lg"
       />
 
-      {/*
-      <img
-        src={logoBahia}
-        alt="Governo da Bahia"
-        className="w-72 object-contain"
-      />
-      */}
+      <div className="mt-16 text-center">
+
+        <h1 className="text-4xl font-bold">
+          SIMTEC BA
+        </h1>
+
+        <p className="mt-6 text-lg leading-8 opacity-90">
+          Sistema Inteligente de Simulados
+        </p>
+
+        <p className="mt-4 text-sm opacity-80 leading-7">
+          Plataforma desenvolvida para auxiliar professores,
+          coordenadores e gestores na criação, organização e
+          aplicação de simulados.
+        </p>
+
+      </div>
 
     </div>
   );

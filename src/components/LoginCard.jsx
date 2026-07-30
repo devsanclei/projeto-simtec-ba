@@ -2,104 +2,78 @@ import { UserCircle2, Mail, Lock, Eye } from "lucide-react";
 
 export default function LoginCard() {
   return (
-    <div className="w-3/5 bg-white flex items-center justify-center p-10">
+    <div className="w-3/5 flex items-center justify-center bg-white">
+
       <div className="w-full max-w-md">
 
-        {/* Ícone */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center">
           <UserCircle2
-            size={80}
+            size={90}
             className="text-blue-700"
           />
         </div>
 
-        {/* Título */}
-        <h1 className="text-3xl font-bold text-center text-slate-800">
+        <h2 className="text-center text-4xl font-bold mt-6">
           Bem-vindo!
-        </h1>
+        </h2>
 
-        <p className="text-center text-slate-500 mt-2 mb-8">
-          Faça login para acessar o sistema.
+        <p className="text-center text-gray-500 mt-3 mb-10">
+          Entre para acessar o SIMTEC BA
         </p>
 
-        {/* Email */}
-        <div className="mb-5">
+        <label className="font-semibold">
+          E-mail
+        </label>
 
-          <label className="font-semibold text-slate-700">
-            E-mail
-          </label>
+        <div className="flex items-center border rounded-xl mt-2 mb-6 px-4 py-3">
 
-          <div className="flex items-center border rounded-xl mt-2 px-4 py-3">
+          <Mail className="text-gray-400" />
 
-            <Mail className="text-gray-400" size={20} />
-
-            <input
-              type="email"
-              placeholder="Digite seu e-mail"
-              className="ml-3 w-full outline-none"
-            />
-
-          </div>
+          <input
+            type="email"
+            placeholder="Digite seu e-mail"
+            className="ml-3 w-full outline-none"
+          />
 
         </div>
 
-        {/* Senha */}
+        <label className="font-semibold">
+          Senha
+        </label>
 
-        <div className="mb-5">
+        <div className="flex items-center border rounded-xl mt-2 px-4 py-3">
 
-          <label className="font-semibold text-slate-700">
-            Senha
-          </label>
+          <Lock className="text-gray-400" />
 
-          <div className="flex items-center border rounded-xl mt-2 px-4 py-3">
+          <input
+            type="password"
+            placeholder="Digite sua senha"
+            className="ml-3 w-full outline-none"
+          />
 
-            <Lock className="text-gray-400" size={20} />
-
-            <input
-              type="password"
-              placeholder="Digite sua senha"
-              className="ml-3 w-full outline-none"
-            />
-
-            <Eye
-              className="text-gray-400 cursor-pointer"
-              size={20}
-            />
-
-          </div>
+          <Eye className="text-gray-400 cursor-pointer" />
 
         </div>
 
-        {/* Checkbox */}
+        <div className="flex justify-between mt-6 mb-8">
 
-        <div className="flex justify-between items-center mb-8">
-
-          <label className="flex items-center gap-2 text-sm">
-
+          <label className="flex gap-2 items-center text-sm">
             <input type="checkbox" />
-
             Lembrar-me
-
           </label>
 
-          <a
-            href="#"
-            className="text-blue-700 text-sm"
-          >
-            Esqueceu a senha?
+          <a href="#" className="text-blue-700 text-sm">
+            Esqueci minha senha
           </a>
 
         </div>
 
-        {/* Botão */}
-
-        <button className="w-full bg-blue-700 hover:bg-blue-800 transition text-white py-3 rounded-xl font-semibold">
-
+        <button className="w-full bg-blue-700 hover:bg-blue-800 transition text-white rounded-xl py-3 font-semibold">
           Entrar
-
         </button>
 
       </div>
+
     </div>
   );
 }
