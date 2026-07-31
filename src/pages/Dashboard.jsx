@@ -8,6 +8,9 @@ import RecentSimulations from "../components/dashboard/RecentSimulations";
 import NoticeBoard from "../components/dashboard/NoticeBoard";
 import ActivityList from "../components/dashboard/ActivityList";
 
+import BarChartCard from "../components/dashboard/BarChartCard";
+import PieChartCard from "../components/dashboard/PieChartCard";
+
 import {
   ClipboardList,
   FileText,
@@ -80,6 +83,21 @@ export default function Dashboard() {
         </SectionCard>
 
       </div>
+      <div className="grid grid-cols-2 gap-6 mt-8">
+
+  <SectionCard title="Simulados por Mês">
+
+    <BarChartCard />
+
+  </SectionCard>
+
+  <SectionCard title="Distribuição por Disciplina">
+
+    <PieChartCard />
+
+  </SectionCard>
+
+</div>
 
     </MainLayout>
   );
