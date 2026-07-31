@@ -25,19 +25,20 @@ const simulados = [
 export default function RecentSimulations() {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-left">
 
-        <thead className="border-b">
+      <table className="w-full">
 
-          <tr>
+        <thead>
 
-            <th className="py-3">Simulado</th>
+          <tr className="border-b">
 
-            <th>Disciplina</th>
+            <th className="text-left py-3">Simulado</th>
 
-            <th>Data</th>
+            <th className="text-left">Disciplina</th>
 
-            <th>Status</th>
+            <th className="text-left">Data</th>
+
+            <th className="text-left">Status</th>
 
           </tr>
 
@@ -67,6 +68,7 @@ export default function RecentSimulations() {
         </tbody>
 
       </table>
+
     </div>
   );
 }

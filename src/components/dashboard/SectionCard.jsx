@@ -1,33 +1,22 @@
-export default function SectionCard({ title, children }) {
+export default function SectionCard({
+    title,
+    children,
+}) {
 
-    return ( 
-       <><div className="grid grid-cols-3 gap-6 mt-8">
+    return (
 
-            <div className="col-span-2">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
 
-                <SectionCard title="Últimos Simulados">
+            <h2 className="text-xl font-semibold mb-6">
 
-                    <RecentSimulations />
+                {title}
 
-                </SectionCard>
+            </h2>
 
-            </div>
+            {children}
 
-            <SectionCard title="Avisos">
+        </div>
 
-                <NoticeBoard />
-
-            </SectionCard>
-
-        </div><div className="mt-8">
-
-                <SectionCard title="Atividades Recentes">
-
-                    <ActivityList />
-
-                </SectionCard>
-
-            </div></>
     );
 
 }

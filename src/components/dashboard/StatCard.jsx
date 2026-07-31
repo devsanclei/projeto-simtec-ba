@@ -1,45 +1,42 @@
 export default function StatCard({
-    title,
-    value,
-    icon: Icon,
-    color,
+  title,
+  value,
+  icon: Icon,
+  color,
 }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all">
 
-    return (
+      <div className="flex justify-between items-center">
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 transition hover:shadow-lg">
+        <div>
 
-            <div className="flex justify-between items-center">
+          <p className="text-sm text-slate-500">
+            {title}
+          </p>
 
-                <div>
-
-                    <p className="text-slate-500 text-sm">
-
-                        {title}
-
-                    </p>
-
-                    <h2 className="text-4xl font-bold mt-3">
-
-                        {value}
-
-                    </h2>
-
-                </div>
-
-                <div
-                    className="p-4 rounded-xl"
-                    style={{ backgroundColor: color }}
-                >
-
-                    <Icon color="white" size={30} />
-
-                </div>
-
-            </div>
+          <h2 className="text-4xl font-bold mt-2">
+            {value}
+          </h2>
 
         </div>
 
-    );
+        <div
+          className="rounded-xl p-4"
+          style={{
+            backgroundColor: color,
+          }}
+        >
 
+          <Icon
+            size={30}
+            color="white"
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+  );
 }
