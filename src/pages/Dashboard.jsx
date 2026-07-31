@@ -3,6 +3,9 @@ import MainLayout from "../components/layout/MainLayout";
 import DashboardGrid from "../components/dashboard/DashboardGrid";
 import StatCard from "../components/dashboard/StatCard";
 import SectionCard from "../components/dashboard/SectionCard";
+import RecentSimulations from "../components/dashboard/RecentSimulations";
+import NoticeBoard from "../components/dashboard/NoticeBoard";
+import ActivityList from "../components/dashboard/ActivityList";
 
 import {
     ClipboardList,
