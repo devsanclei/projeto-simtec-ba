@@ -1,9 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import DevNavigation from "../components/DevNavigation";
-
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import Simulados from "../pages/Simulados";
+import Questoes from "../pages/Questoes";
+import Disciplinas from "../pages/Disciplinas";
+import Professores from "../pages/Professores";
+import Usuarios from "../pages/Usuarios";
+import Relatorios from "../pages/Relatorios";
+import Configuracoes from "../pages/Configuracoes";
 
 export default function AppRoutes() {
   return (
