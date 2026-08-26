@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import MainLayout from "../components/layout/MainLayout";
 import Toolbar from "../components/simulados/Toolbar";
@@ -14,6 +14,19 @@ export default function Simulados() {
   const [simuladoSelecionado, setSimuladoSelecionado] =
     useState(null);
 
+  // Filtros
+  const [pesquisa, setPesquisa] = useState("");
+
+  const [disciplina, setDisciplina] =
+    useState("");
+
+  const [status, setStatus] =
+    useState("");
+
+  // --------------------------------
+  // MODAL
+  // --------------------------------
+
   const abrirModal = () => {
     setSimuladoSelecionado(null);
     setModalAberto(true);
@@ -23,6 +36,10 @@ export default function Simulados() {
     setModalAberto(false);
     setSimuladoSelecionado(null);
   };
+
+  // --------------------------------
+  // CRIAR / EDITAR
+  // --------------------------------
 
   const adicionarSimulado = (novoSimulado) => {
 
@@ -54,10 +71,18 @@ export default function Simulados() {
     fecharModal();
   };
 
+  // --------------------------------
+  // EDITAR
+  // --------------------------------
+
   const editarSimulado = (simulado) => {
     setSimuladoSelecionado(simulado);
     setModalAberto(true);
   };
+
+  // --------------------------------
+  // EXCLUIR
+  // --------------------------------
 
   const excluirSimulado = (id) => {
 
@@ -76,6 +101,46 @@ export default function Simulados() {
     );
   };
 
+  // --------------------------------
+  // FILTROS
+  // --------------------------------
+
+  const simuladosFiltrados = useMemo(() => {
+
+    return simulados.filter((simulado) => {
+
+      const correspondePesquisa =
+        simulado.nome
+          .toLowerCase()
+          .includes(pesquisa.toLowerCase());
+
+      const correspondeDisciplina =
+        disciplina === "" ||
+        simulado.disciplina === disciplina;
+
+      const correspondeStatus =
+        status === "" ||
+        simulado.status === status;
+
+      return (
+        correspondePesquisa &&
+        correspondeDisciplina &&
+        correspondeStatus
+      );
+    });
+
+  }, [simulados, pesquisa, disciplina, status]);
+
+  // --------------------------------
+  // LIMPAR FILTROS
+  // --------------------------------
+
+  const limparFiltros = () => {
+    setPesquisa("");
+    setDisciplina("");
+    setStatus("");
+  };
+
   return (
     <MainLayout>
 
@@ -88,11 +153,37 @@ export default function Simulados() {
       </p>
 
       <Toolbar
+        pesquisa={pesquisa}
+        setPesquisa={setPesquisa}
+        disciplina={disciplina}
+        setDisciplina={setDisciplina}
+        status={status}
+        setStatus={setStatus}
+        limparFiltros={limparFiltros}
         onNewSimulation={abrirModal}
       />
 
+      {/* Contador */}
+      <div className="flex justify-between items-center mb-4">
+
+        <p className="text-sm text-slate-500">
+
+          Mostrando{" "}
+          <strong className="text-slate-700">
+            {simuladosFiltrados.length}
+          </strong>{" "}
+          de{" "}
+          <strong className="text-slate-700">
+            {simulados.length}
+          </strong>{" "}
+          simulados
+
+        </p>
+
+      </div>
+
       <SimuladosTable
-        simulados={simulados}
+        simulados={simuladosFiltrados}
         onEdit={editarSimulado}
         onDelete={excluirSimulado}
       />
