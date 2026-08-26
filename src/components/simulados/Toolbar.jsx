@@ -1,6 +1,8 @@
 import { Search, Plus } from "lucide-react";
 
-export default function Toolbar({ onNewSimulation }) {
+export default function Toolbar({
+  onNewSimulation,
+}) {
 
   return (
     <div className="flex justify-between items-center mb-6">

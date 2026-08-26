@@ -2,10 +2,12 @@ import { Pencil, Trash2 } from "lucide-react";
 
 import StatusBadge from "./StatusBadge";
 
-export default function SimuladosTable({ simulados }) {
-
+export default function SimuladosTable({
+  simulados,
+  onDelete,
+  onEdit,
+}) {
   if (simulados.length === 0) {
-
     return (
       <div className="bg-white rounded-2xl shadow border p-10 text-center">
 
@@ -19,7 +21,6 @@ export default function SimuladosTable({ simulados }) {
 
       </div>
     );
-
   }
 
   return (
@@ -90,14 +91,18 @@ export default function SimuladosTable({ simulados }) {
 
                     <button
                       type="button"
-                      className="text-slate-500 hover:text-blue-600"
+                      onClick={() => onEdit(simulado)}
+                      title="Editar simulado"
+                      className="text-slate-500 hover:text-blue-600 transition"
                     >
                       <Pencil size={18} />
                     </button>
 
                     <button
                       type="button"
-                      className="text-slate-500 hover:text-red-600"
+                      onClick={() => onDelete(simulado.id)}
+                      title="Excluir simulado"
+                      className="text-slate-500 hover:text-red-600 transition"
                     >
                       <Trash2 size={18} />
                     </button>

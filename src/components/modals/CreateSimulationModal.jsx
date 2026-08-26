@@ -1,10 +1,33 @@
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 export default function CreateSimulationModal({
   isOpen,
   onClose,
   onSave,
+  simulation,
 }) {
+  const [nome, setNome] = useState("");
+  const [disciplina, setDisciplina] = useState("");
+  const [data, setData] = useState("");
+  const [status, setStatus] = useState("Rascunho");
+
+  const editando = Boolean(simulation);
+
+  useEffect(() => {
+    if (simulation) {
+      setNome(simulation.nome);
+      setDisciplina(simulation.disciplina);
+      setData(simulation.data);
+      setStatus(simulation.status);
+    } else {
+      setNome("");
+      setDisciplina("");
+      setData("");
+      setStatus("Rascunho");
+    }
+  }, [simulation, isOpen]);
+
   if (!isOpen) {
     return null;
   }
@@ -12,18 +35,13 @@ export default function CreateSimulationModal({
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-
-    const novoSimulado = {
-      nome: formData.get("nome"),
-      disciplina: formData.get("disciplina"),
-      data: formData.get("data"),
-      status: formData.get("status"),
-    };
-
-    onSave(novoSimulado);
-
-    event.target.reset();
+    onSave({
+      id: simulation?.id,
+      nome,
+      disciplina,
+      data,
+      status,
+    });
   };
 
   return (
@@ -35,11 +53,13 @@ export default function CreateSimulationModal({
 
           <div>
             <h2 className="text-xl font-bold text-slate-800">
-              Novo Simulado
+              {editando ? "Editar Simulado" : "Novo Simulado"}
             </h2>
 
             <p className="text-sm text-slate-500 mt-1">
-              Cadastre um novo simulado no sistema.
+              {editando
+                ? "Atualize os dados do simulado."
+                : "Cadastre um novo simulado no sistema."}
             </p>
           </div>
 
@@ -50,10 +70,12 @@ export default function CreateSimulationModal({
           >
             <X size={22} />
           </button>
-
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 space-y-5"
+        >
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -62,7 +84,8 @@ export default function CreateSimulationModal({
 
             <input
               type="text"
-              name="nome"
+              value={nome}
+              onChange={(event) => setNome(event.target.value)}
               placeholder="Ex.: Matemática - 2º Ano"
               required
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
@@ -75,7 +98,8 @@ export default function CreateSimulationModal({
             </label>
 
             <select
-              name="disciplina"
+              value={disciplina}
+              onChange={(event) => setDisciplina(event.target.value)}
               required
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
             >
@@ -116,7 +140,8 @@ export default function CreateSimulationModal({
 
             <input
               type="date"
-              name="data"
+              value={data}
+              onChange={(event) => setData(event.target.value)}
               required
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
             />
@@ -128,8 +153,8 @@ export default function CreateSimulationModal({
             </label>
 
             <select
-              name="status"
-              defaultValue="Rascunho"
+              value={status}
+              onChange={(event) => setStatus(event.target.value)}
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
             >
               <option value="Rascunho">
@@ -138,6 +163,10 @@ export default function CreateSimulationModal({
 
               <option value="Ativo">
                 Ativo
+              </option>
+
+              <option value="Encerrado">
+                Encerrado
               </option>
             </select>
           </div>
@@ -156,15 +185,15 @@ export default function CreateSimulationModal({
               type="submit"
               className="rounded-xl bg-blue-600 px-5 py-3 font-medium text-white hover:bg-blue-700"
             >
-              Salvar Simulado
+              {editando
+                ? "Salvar Alterações"
+                : "Salvar Simulado"}
             </button>
 
           </div>
 
         </form>
-
       </div>
-
     </div>
   );
 }
