@@ -18,11 +18,14 @@ export default function QuestionModal({
   const [alternativaD, setAlternativaD] = useState("");
 
   const [respostaCorreta, setRespostaCorreta] = useState("A");
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     if (!isOpen) {
       return;
     }
+
+    setErro("");
 
     if (question) {
       setEnunciado(question.enunciado || "");
@@ -35,7 +38,12 @@ export default function QuestionModal({
       setAlternativaC(question.alternativaC || "");
       setAlternativaD(question.alternativaD || "");
 
-      setRespostaCorreta(question.respostaCorreta || "A");
+      setRespostaCorreta(
+        question.respostaCorreta ||
+          (question.tipo === "Verdadeiro ou falso"
+            ? "Verdadeiro"
+            : "A")
+      );
     } else {
       setEnunciado("");
       setDisciplina("");
@@ -60,22 +68,89 @@ export default function QuestionModal({
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const enunciadoLimpo = enunciado.trim();
+    const disciplinaLimpa = disciplina.trim();
+
+    if (!enunciadoLimpo) {
+      setErro("Digite o enunciado da questão.");
+      return;
+    }
+
+    if (!disciplinaLimpa) {
+      setErro("Selecione uma disciplina.");
+      return;
+    }
+
+    if (tipo === "Múltipla escolha") {
+      if (!alternativaA.trim()) {
+        setErro("Preencha a Alternativa A.");
+        return;
+      }
+
+      if (!alternativaB.trim()) {
+        setErro("Preencha a Alternativa B.");
+        return;
+      }
+
+      if (!alternativaC.trim()) {
+        setErro("Preencha a Alternativa C.");
+        return;
+      }
+
+      if (!alternativaD.trim()) {
+        setErro("Preencha a Alternativa D.");
+        return;
+      }
+
+      if (!["A", "B", "C", "D"].includes(respostaCorreta)) {
+        setErro("Selecione a resposta correta.");
+        return;
+      }
+    }
+
+    if (tipo === "Verdadeiro ou falso") {
+      if (
+        !["Verdadeiro", "Falso"].includes(
+          respostaCorreta
+        )
+      ) {
+        setErro("Selecione a resposta correta.");
+        return;
+      }
+    }
+
+    setErro("");
+
     onSave({
       ...(question ? { id: question.id } : {}),
-      enunciado,
-      disciplina,
+      enunciado: enunciadoLimpo,
+      disciplina: disciplinaLimpa,
       dificuldade,
       tipo,
       alternativaA:
-        tipo === "Múltipla escolha" ? alternativaA : "",
+        tipo === "Múltipla escolha"
+          ? alternativaA.trim()
+          : "",
       alternativaB:
-        tipo === "Múltipla escolha" ? alternativaB : "",
+        tipo === "Múltipla escolha"
+          ? alternativaB.trim()
+          : "",
       alternativaC:
-        tipo === "Múltipla escolha" ? alternativaC : "",
+        tipo === "Múltipla escolha"
+          ? alternativaC.trim()
+          : "",
       alternativaD:
-        tipo === "Múltipla escolha" ? alternativaD : "",
+        tipo === "Múltipla escolha"
+          ? alternativaD.trim()
+          : "",
       respostaCorreta,
     });
+  };
+
+  const limparErro = () => {
+    if (erro) {
+      setErro("");
+    }
   };
 
   return (
@@ -86,7 +161,9 @@ export default function QuestionModal({
         <div className="flex items-center justify-between border-b px-6 py-5">
           <div>
             <h2 className="text-xl font-bold text-slate-800">
-              {modoEdicao ? "Editar Questão" : "Nova Questão"}
+              {modoEdicao
+                ? "Editar Questão"
+                : "Nova Questão"}
             </h2>
 
             <p className="mt-1 text-sm text-slate-500">
@@ -111,6 +188,13 @@ export default function QuestionModal({
           onSubmit={handleSubmit}
           className="space-y-5 p-6"
         >
+          {/* Mensagem de erro */}
+          {erro && (
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+              {erro}
+            </div>
+          )}
+
           {/* Enunciado */}
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-700">
@@ -119,9 +203,10 @@ export default function QuestionModal({
 
             <textarea
               value={enunciado}
-              onChange={(event) =>
-                setEnunciado(event.target.value)
-              }
+              onChange={(event) => {
+                setEnunciado(event.target.value);
+                limparErro();
+              }}
               placeholder="Digite o enunciado da questão..."
               required
               rows={4}
@@ -137,9 +222,10 @@ export default function QuestionModal({
 
             <select
               value={disciplina}
-              onChange={(event) =>
-                setDisciplina(event.target.value)
-              }
+              onChange={(event) => {
+                setDisciplina(event.target.value);
+                limparErro();
+              }}
               required
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500"
             >
@@ -181,9 +267,10 @@ export default function QuestionModal({
 
             <select
               value={dificuldade}
-              onChange={(event) =>
-                setDificuldade(event.target.value)
-              }
+              onChange={(event) => {
+                setDificuldade(event.target.value);
+                limparErro();
+              }}
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500"
             >
               <option value="Fácil">Fácil</option>
@@ -210,6 +297,8 @@ export default function QuestionModal({
                 } else {
                   setRespostaCorreta("Verdadeiro");
                 }
+
+                limparErro();
               }}
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500"
             >
@@ -223,7 +312,7 @@ export default function QuestionModal({
             </select>
           </div>
 
-          {/* Alternativas */}
+          {/* Múltipla escolha */}
           {tipo === "Múltipla escolha" && (
             <div className="space-y-4">
               <h3 className="font-semibold text-slate-700">
@@ -233,9 +322,10 @@ export default function QuestionModal({
               <input
                 type="text"
                 value={alternativaA}
-                onChange={(event) =>
-                  setAlternativaA(event.target.value)
-                }
+                onChange={(event) => {
+                  setAlternativaA(event.target.value);
+                  limparErro();
+                }}
                 placeholder="Alternativa A"
                 required
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500"
@@ -244,9 +334,10 @@ export default function QuestionModal({
               <input
                 type="text"
                 value={alternativaB}
-                onChange={(event) =>
-                  setAlternativaB(event.target.value)
-                }
+                onChange={(event) => {
+                  setAlternativaB(event.target.value);
+                  limparErro();
+                }}
                 placeholder="Alternativa B"
                 required
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500"
@@ -255,9 +346,10 @@ export default function QuestionModal({
               <input
                 type="text"
                 value={alternativaC}
-                onChange={(event) =>
-                  setAlternativaC(event.target.value)
-                }
+                onChange={(event) => {
+                  setAlternativaC(event.target.value);
+                  limparErro();
+                }}
                 placeholder="Alternativa C"
                 required
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500"
@@ -266,15 +358,15 @@ export default function QuestionModal({
               <input
                 type="text"
                 value={alternativaD}
-                onChange={(event) =>
-                  setAlternativaD(event.target.value)
-                }
+                onChange={(event) => {
+                  setAlternativaD(event.target.value);
+                  limparErro();
+                }}
                 placeholder="Alternativa D"
                 required
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500"
               />
 
-              {/* Resposta correta */}
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   Resposta correta
@@ -282,9 +374,10 @@ export default function QuestionModal({
 
                 <select
                   value={respostaCorreta}
-                  onChange={(event) =>
-                    setRespostaCorreta(event.target.value)
-                  }
+                  onChange={(event) => {
+                    setRespostaCorreta(event.target.value);
+                    limparErro();
+                  }}
                   className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500"
                 >
                   <option value="A">
@@ -316,9 +409,10 @@ export default function QuestionModal({
 
               <select
                 value={respostaCorreta}
-                onChange={(event) =>
-                  setRespostaCorreta(event.target.value)
-                }
+                onChange={(event) => {
+                  setRespostaCorreta(event.target.value);
+                  limparErro();
+                }}
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500"
               >
                 <option value="Verdadeiro">
