@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const pool = require("../config/database");
 
@@ -39,7 +40,7 @@ const login = async (req, res) => {
       });
     }
 
-    // Compara a senha enviada com o hash salvo no banco
+    // Compara a senha informada com a senha criptografada
     const senhaCorreta = await bcrypt.compare(
       senha,
       usuario.senha
@@ -51,7 +52,20 @@ const login = async (req, res) => {
       });
     }
 
-    // Login realizado com sucesso
+    // Gera o token de autenticação
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        email: usuario.email,
+        perfil: usuario.perfil,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "8h",
+      }
+    );
+
+    // Retorna os dados do usuário e o token
     return res.status(200).json({
       mensagem: "Login realizado com sucesso.",
       usuario: {
@@ -60,6 +74,7 @@ const login = async (req, res) => {
         email: usuario.email,
         perfil: usuario.perfil,
       },
+      token,
     });
   } catch (erro) {
     console.error("Erro ao realizar login:", erro);
